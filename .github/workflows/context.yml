@@ -1,0 +1,30 @@
+name: Context Demo
+on: push
+env:
+  MY_ENV: workflow-level
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Actor: ${{ github.actor }}"
+          echo "Event: ${{ github.event_name }}"
+          echo "Runner OS: ${{ runner.os }}"
+          echo "Env: $MY_ENV"
+      - name: Contains check
+        if: contains(github.ref, 'main')
+        run: echo "On main branch"
+      - name: Success step
+        if: success()
+        run: echo "previous steps succeeded"
+      - name: Failure step
+        if: failure()
+        run: echo "only runs on failure"
+      - name: Always step
+        if: always()
+        run: echo "always runs"
+  second:
+    needs: inspect
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "runs after inspect"
