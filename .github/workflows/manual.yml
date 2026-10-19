@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       name:
-        description: Farhan Ijaz
+        description: name
         required: true
       greeting:
         description: Greeting
