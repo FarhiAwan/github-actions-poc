@@ -1,0 +1,9 @@
+name: Webhook
+on:
+  repository_dispatch:
+    types: [customwebhook]
+jobs:
+  show:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Event type is ${{ github.event.action }}"
