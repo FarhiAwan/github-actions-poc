@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Run my custom action
         id: hello
-        uses: FarhiAwan/barsoom-action@v1.0.0
+        uses: FarhiAwan/barsoom-action@v1.0.1
         with:
           name: barsoom
 
