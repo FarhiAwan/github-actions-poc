@@ -1,0 +1,48 @@
+name: Matrix Cache Service
+on: workflow_dispatch
+jobs:
+  matrix:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [20, 22]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: node --version
+
+  cache:
+    runs-on: ubuntu-latest
+    steps:
+      - id: cache
+        uses: actions/cache@v4
+        with:
+          path: ~/demo-cache
+          key: demo-${{ runner.os }}-v1
+      - name: Create cache content on miss
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/demo-cache
+          date > ~/demo-cache/file.txt
+      - run: echo "Cache hit? ${{ steps.cache.outputs.cache-hit }}"
+
+  service:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - run: |
+          sudo apt-get update && sudo apt-get install -y postgresql-client
+          PGPASSWORD=postgres psql -h localhost -U postgres -c "SELECT version();"
