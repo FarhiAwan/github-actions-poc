@@ -1,0 +1,7 @@
+name: Self Hosted
+on: workflow_dispatch
+jobs:
+  job:
+    runs-on: [self-hosted, poc]
+    steps:
+      - run: echo "Running on my own runner"
