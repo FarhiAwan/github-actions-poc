@@ -1,0 +1,17 @@
+
+name: Use Custom Action
+
+on: workflow_dispatch
+
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run my custom action
+        id: hello
+        uses: FarhiAwan/barsoom-action@v1.0.0
+        with:
+          name: Farhan Ijaz
+
+      - name: Print the output
+        run: echo "Output was ${{ steps.hello.outputs.greeting }}"
