@@ -1,0 +1,26 @@
+name: Multi OS
+on: workflow_dispatch
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - run: lsb_release -a
+  mac:
+    runs-on: macos-latest
+    steps:
+      - run: |
+          echo 'print("Hello from Swift")' > hello.swift
+          swiftc hello.swift -o hello
+          ./hello
+          sw_vers
+  windows:
+    runs-on: windows-latest
+    steps:
+      - name: Install jq with Chocolatey
+        run: choco install jq -y
+      - name: PowerShell script
+        shell: pwsh
+        run: |
+          Write-Host "OS: $env:OS"
+          $PSVersionTable
+          jq --version
